@@ -71,7 +71,7 @@ networks:
     driver: bridge
     driver_opts:
       # Configura la red como interna sin acceso externo
-      com.docker.network.bridge.name: br-buhos-network
+      com.docker.network.bridge.name: br-buhos
 
 volumes:
   buhosapp-db-data:
