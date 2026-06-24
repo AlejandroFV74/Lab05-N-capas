@@ -51,9 +51,8 @@ jobs:
 
         # Prueba en levantar la app, por lo que crea un .env de prueba
       - name: Create test .env
-        working-directory: ./lab02
         run: |
-          cat <<END > .env
+          cat <<END > lab02/.env
           DATABASE_NAME=buhosapp_ci
           DATABASE_USERNAME=ci_user
           DATABASE_PASSWORD=ci_password
@@ -64,8 +63,7 @@ jobs:
           END
 
       - name: docker-compose-up
-        working-directory: ./lab02
-        run: docker compose up --build -d
+        run: docker compose -f lab02/docker-compose.yml up --build -d
 
       - name: wait-response
         run: |
@@ -86,4 +84,4 @@ jobs:
 
       - name: shutdown
         if: always()
-        run: docker compose down -v
+        run: docker compose -f lab02/docker-compose.yml down -v
