@@ -31,6 +31,7 @@ jobs:
 
       - name: Build + Tests
         # Ejecuta el proyecto, los test y lo empaqueta
+        working-directory: ./lab02
         run: ./mvnw clean verify -B
 
         # Crea reportes de los test
@@ -39,7 +40,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: test-results
-          path: target/surefire-reports/
+          path: lab02/target/surefire-reports/
 
   smoke-test-compose:
     needs: build-and-test
@@ -51,7 +52,7 @@ jobs:
         # Prueba en levantar la app, por lo que crea un .env de prueba
       - name: Create test .env
         run: |
-          cat <<END > .env
+          cat <<END > lab02/.env
           DATABASE_NAME=buhosapp_ci
           DATABASE_USERNAME=ci_user
           DATABASE_PASSWORD=ci_password
@@ -62,7 +63,7 @@ jobs:
           END
 
       - name: docker-compose-up
-        run: docker compose up --build -d
+        run: docker compose -f lab02/docker-compose.yml up --build -d
 
       - name: wait-response
         run: |
@@ -83,4 +84,4 @@ jobs:
 
       - name: shutdown
         if: always()
-        run: docker compose down -v
+        run: docker compose -f lab02/docker-compose.yml down -v
